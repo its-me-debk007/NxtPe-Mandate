@@ -5,37 +5,29 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nxtpetask.ui.viewmodel.HomeViewModel
 import com.example.nxtpetask.util.ApiState
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
-    val mandateUiState by viewModel.getMandateDetails().collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-
-    }
-
-    when (mandateUiState) {
+    when (viewModel.mandateState.value) {
         is ApiState.Loading -> {
-//            Log.d("retro", "loading")
+            Log.d("retro", "loading")
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
 
         is ApiState.Error -> {
-            Log.d("retro", mandateUiState.errorMsg!!)
+            Log.d("retro", viewModel.mandateState.value.errorMsg!!)
         }
 
         is ApiState.Success -> {
-            Log.d("retro", mandateUiState.data!!.page_title)
+            Log.d("retro", viewModel.mandateState.value.data!!.cancel_text)
         }
     }
 }

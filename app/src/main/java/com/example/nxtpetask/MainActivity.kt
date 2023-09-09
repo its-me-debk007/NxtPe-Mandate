@@ -13,17 +13,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.nxtpetask.ui.screen.HomeScreen
 import com.example.nxtpetask.ui.theme.NxtPeTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBlocking {
-
-        }
-
         setContent {
             NxtPeTaskTheme {
                 Surface(
