@@ -1,6 +1,9 @@
 package com.example.nxtpetask.ui.screen
 
 import android.util.Log
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -69,6 +72,7 @@ import com.example.nxtpetask.ui.theme.OrangeShade2
 import com.example.nxtpetask.ui.theme.TextColorGrey
 import com.example.nxtpetask.ui.viewmodel.HomeViewModel
 import com.example.nxtpetask.util.ApiState
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -353,8 +357,25 @@ fun PayUsingCard(text: String, iconUrl: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun MinimalDialog(text: String, seconds: Long = -1, startTimer: () -> Unit = {}) {
-    LaunchedEffect(Unit) { startTimer() }
+fun MinimalDialog(text: String, seconds: Long = -1L, startTimer: () -> Unit = {}) {
+    var showIcon by remember { mutableStateOf(false) }
+
+    val iconSize by animateDpAsState(
+        targetValue = if (showIcon) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = ""
+    )
+
+    LaunchedEffect(Unit) {
+        if (seconds != -1L) startTimer()
+        else {
+            delay(350)
+            showIcon = true
+        }
+    }
 
     Dialog(onDismissRequest = {}) {
         Card(
@@ -380,10 +401,12 @@ fun MinimalDialog(text: String, seconds: Long = -1, startTimer: () -> Unit = {})
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center
                 )
-                else Image(
-                    painter = painterResource(id = R.drawable.ic_complete),
-                    contentDescription = null
-                )
+                else
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_complete),
+                        contentDescription = null,
+                        modifier = Modifier.size(iconSize)
+                    )
 
                 Text(
                     text = text,

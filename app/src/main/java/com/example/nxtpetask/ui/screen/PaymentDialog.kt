@@ -11,9 +11,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -29,12 +26,10 @@ fun DotsLoadingAnimation(
 ) {
     val dotSpacing = (dotSize * 5.6).dp
     val dotRadius = (dotSize.dp / 2).toPx()
-    val durationInMillis = 1200
+    val durationInMillis = 1400
     val (initialSize, finalSize) = 1f to 1.8f
 
     val infiniteTransition = rememberInfiniteTransition()
-    val delayInMillis by remember { mutableStateOf(500) }
-    var firstTime by remember { mutableStateOf(0) }
 
     val scale by infiniteTransition.animateFloat(
         initialValue = initialSize,
@@ -45,7 +40,7 @@ fun DotsLoadingAnimation(
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse,
-            initialStartOffset = StartOffset(durationInMillis)
+//            initialStartOffset = StartOffset(500)
         ),
         label = ""
     )
@@ -59,7 +54,7 @@ fun DotsLoadingAnimation(
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse,
-            initialStartOffset = StartOffset(100)
+            initialStartOffset = StartOffset(700)
         ),
         label = ""
     )
@@ -73,7 +68,7 @@ fun DotsLoadingAnimation(
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse,
-            initialStartOffset = StartOffset(durationInMillis)
+            initialStartOffset = StartOffset(1100)
         ),
         label = ""
     )
