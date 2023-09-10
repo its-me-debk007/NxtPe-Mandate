@@ -25,8 +25,7 @@ class HomeViewModel @Inject constructor(
         getMandateDetails()
     }
 
-    private val _mandateState: MutableState<ApiState<MandateDTO>> =
-        mutableStateOf(ApiState.Loading())
+    private val _mandateState: MutableState<ApiState<MandateDTO>> = mutableStateOf(ApiState.Loading())
     val mandateState: State<ApiState<MandateDTO>> get() = _mandateState
 
     private val _timer: MutableState<Long> = mutableStateOf(0)
@@ -37,14 +36,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getMandateDetails() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getMandateDetails()
-            _mandateState.value = when (response) {
-                is ApiState.Loading -> ApiState.Loading()
-
-                is ApiState.Error -> ApiState.Error(response.errorMsg.toString())
-
-                is ApiState.Success -> ApiState.Success(response.data)
-            }
+            _mandateState.value = repository.getMandateDetails()
         }
     }
 
@@ -54,8 +46,7 @@ class HomeViewModel @Inject constructor(
             if (timer.value == 14L) {
                 showLoadingDialog = false
                 showConfirmationDialog = true
-            }
-            else if (timer.value == 8L) {
+            } else if (timer.value == 8L) {
                 showConfirmationDialog = false
                 cancel()
             }
