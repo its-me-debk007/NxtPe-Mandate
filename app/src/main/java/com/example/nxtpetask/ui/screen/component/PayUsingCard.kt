@@ -38,7 +38,7 @@ fun PayUsingCard(text: String, iconUrl: String, onClick: () -> Unit) {
             .clickable { onClick() }
             .border(BorderStroke(0.3.dp, DarkOrange), RoundedCornerShape(10.dp)),
         colors = CardDefaults.cardColors(Color.White, contentColor = Black),
-        elevation = CardDefaults.elevatedCardElevation(1.dp)
+        elevation = CardDefaults.elevatedCardElevation(2.dp)
     ) {
 
         Row(
