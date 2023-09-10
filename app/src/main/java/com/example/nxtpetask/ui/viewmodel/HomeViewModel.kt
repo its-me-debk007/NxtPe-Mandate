@@ -54,6 +54,9 @@ class HomeViewModel @Inject constructor(
             if (timer.value == 14L) {
                 showLoadingDialog = false
                 showConfirmationDialog = true
+            }
+            else if (timer.value == 8L) {
+                showConfirmationDialog = false
                 cancel()
             }
         }

@@ -2,6 +2,7 @@ package com.example.nxtpetask.ui.screen
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -26,47 +27,53 @@ fun DotsLoadingAnimation(
     dotColor: Color,
     dotSize: Int = 10
 ) {
-    val dotSpacing = (dotSize * 5.5).dp
+    val dotSpacing = (dotSize * 5.6).dp
     val dotRadius = (dotSize.dp / 2).toPx()
+    val durationInMillis = 1200
+    val (initialSize, finalSize) = 1f to 1.8f
 
     val infiniteTransition = rememberInfiniteTransition()
     val delayInMillis by remember { mutableStateOf(500) }
     var firstTime by remember { mutableStateOf(0) }
 
     val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.5f,
+        initialValue = initialSize,
+        targetValue = finalSize,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 800, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
+            animation = tween(
+                durationMillis = durationInMillis,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse,
+            initialStartOffset = StartOffset(durationInMillis)
         ),
         label = ""
     )
 
     val scale2 by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.5f,
+        initialValue = initialSize,
+        targetValue = finalSize,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                delayMillis = if (firstTime++ == 0) delayInMillis else 0,
-                durationMillis = 800,
+                durationMillis = durationInMillis,
                 easing = LinearEasing
             ),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Reverse,
+            initialStartOffset = StartOffset(100)
         ),
         label = ""
     )
 
     val scale3 by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.5f,
+        initialValue = initialSize,
+        targetValue = finalSize,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                delayMillis = if (firstTime++ == 1) delayInMillis * 2 else 0,
-                durationMillis = 800,
+                durationMillis = durationInMillis,
                 easing = LinearEasing
             ),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Reverse,
+            initialStartOffset = StartOffset(durationInMillis)
         ),
         label = ""
     )
