@@ -1,4 +1,4 @@
-package com.example.nxtpetask.ui.screen
+package com.example.nxtpetask.ui.screen.component
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

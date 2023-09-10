@@ -48,7 +48,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    val countDownTimer = object : CountDownTimer(20000, 1000L) {
+    val countDownTimer = object : CountDownTimer(21000, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
             _timer.value = millisUntilFinished / 1000
             if (timer.value == 14L) {
