@@ -21,9 +21,9 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    init {
-        getMandateDetails()
-    }
+//    init {
+//        getMandateDetails()
+//    }
 
     private val _mandateState: MutableState<ApiState<MandateDTO>> = mutableStateOf(ApiState.Loading())
     val mandateState: State<ApiState<MandateDTO>> get() = _mandateState
@@ -52,7 +52,6 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-        override fun onFinish() {
-        }
+        override fun onFinish() {}
     }
 }

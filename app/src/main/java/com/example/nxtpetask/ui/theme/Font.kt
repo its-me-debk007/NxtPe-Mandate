@@ -11,3 +11,9 @@ val OpenSans = FontFamily(
     Font(R.font.opensans_semibold, weight = FontWeight.SemiBold),
     Font(R.font.opensans_bold, weight = FontWeight.Bold),
 )
+
+val Poppins = FontFamily(
+    Font(R.font.poppins_regular),
+    Font(R.font.poppins_light, weight = FontWeight.Light),
+    Font(R.font.poppins_medium, weight = FontWeight.Medium)
+)
