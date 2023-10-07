@@ -1,4 +1,4 @@
-package com.example.nxtpetask.ui.screen
+package com.example.nxtpetask.ui.screen.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,8 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,6 +37,7 @@ import com.example.nxtpetask.R
 import com.example.nxtpetask.ui.theme.ActiveTickGreen
 import com.example.nxtpetask.ui.theme.InactiveTickGrey
 import com.example.nxtpetask.ui.theme.Orange
+import com.example.nxtpetask.util.DIALOG_CORNER_RADIUS
 import kotlinx.coroutines.delay
 
 @Composable
@@ -66,19 +67,20 @@ fun CustomDialog(simNo: Int, simName: String, onDismissRequest: () -> Unit, onPr
                 color = Orange,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
-                    .padding(end = 16.dp)
                     .clickable { onProceed() })
         },
         dismissButton = {
-            Text(text = "Change SIM", modifier = Modifier.clickable { onDismissRequest() })
+            Text(text = "Change SIM", fontWeight = FontWeight.Normal, modifier = Modifier.padding(end = 18.dp).clickable { onDismissRequest() })
         },
         text = {
             Text(
                 text = "You have selected SIM $simNo - $simName. Do you want to proceed?",
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp
+                fontWeight = FontWeight.Normal,
+                fontSize = 15.sp
             )
-        }
+        },
+        shape = RoundedCornerShape(DIALOG_CORNER_RADIUS),
+        containerColor = Color.White
     )
 }
 
@@ -98,7 +100,7 @@ fun CustomVerificationDialog(navController: NavController, onDismissRequest: () 
     }
 
     Dialog(onDismissRequest = onDismissRequest) {
-        Column(Modifier.background(Color.White, shape = RoundedCornerShape(8.dp)).padding(24.dp)) {
+        Column(Modifier.background(Color.White, shape = RoundedCornerShape(DIALOG_CORNER_RADIUS)).padding(24.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -106,7 +108,7 @@ fun CustomVerificationDialog(navController: NavController, onDismissRequest: () 
                 Image(
                     painter = painterResource(id = R.drawable.verify),
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(36.dp)
                 )
 
                 Text(
@@ -120,30 +122,33 @@ fun CustomVerificationDialog(navController: NavController, onDismissRequest: () 
             Step(text = "Verification Initiated", selected = stepsCompleted >= 0)
 
             Spacer(
-                modifier = Modifier.padding(start = 12.dp)
-                    .width(2.dp)
+                modifier = Modifier.offset(y = (-2).dp)
+                    .padding(start = 11.dp)
+                    .width(1.2.dp)
                     .height(16.dp)
                     .background(if (stepsCompleted >= 0) ActiveTickGreen else InactiveTickGrey)
             )
 
-            Step(text = "SMS sent from your mobile", selected = stepsCompleted >= 1)
+            Step(text = "SMS sent from your mobile", selected = stepsCompleted >= 1, modifier = Modifier.offset(y = (-4).dp))
 
             Spacer(
-                modifier = Modifier.padding(start = 12.dp)
-                    .width(2.dp)
+                modifier = Modifier.offset(y = (-6).dp)
+                    .padding(start = 11.dp)
+                    .width(1.2.dp)
                     .height(16.dp)
                     .background(if (stepsCompleted >= 1) ActiveTickGreen else InactiveTickGrey)
             )
 
-            Step(text = "Verification Completed", selected = stepsCompleted >= 2)
+            Step(text = "Verification Completed", selected = stepsCompleted >= 2, modifier = Modifier.offset(y = (-8).dp))
         }
     }
 }
 
 @Composable
-fun Step(text: String, selected: Boolean) {
+fun Step(text: String, selected: Boolean, modifier: Modifier = Modifier) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ) {
         Icon(
             imageVector = Icons.Filled.Check,

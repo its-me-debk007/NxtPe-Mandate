@@ -3,24 +3,27 @@ package com.example.nxtpetask.ui.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -28,6 +31,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -42,10 +46,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,14 +62,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.example.nxtpetask.R
+import com.example.nxtpetask.ui.theme.Black
 import com.example.nxtpetask.ui.theme.Grey
 import com.example.nxtpetask.ui.theme.Orange
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun SetLoginPin() {
-    var isBtnEnabled by remember { mutableStateOf(false) }
+    var isBtnEnabled by remember { mutableStateOf(true) }
     var secretQuestionAnswer by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
 
@@ -71,7 +77,7 @@ fun SetLoginPin() {
         Modifier
             .fillMaxSize()
             .padding(vertical = 32.dp, horizontal = 16.dp)
-            .scrollable(scrollState, Orientation.Vertical)
+            .verticalScroll(scrollState)
     ) {
         Image(
             painter = painterResource(id = R.drawable.pin_img),
@@ -119,40 +125,48 @@ fun SetLoginPin() {
 
                 CustomDropDown(Modifier.padding(bottom = 16.dp, top = 16.dp))
 
-                TextField(
-                    value = secretQuestionAnswer,
-                    onValueChange = { secretQuestionAnswer = it },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Orange
-                    ),
+                Surface(
+                    shadowElevation = 4.dp,
+                    contentColor = Color.White,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(2.dp, shape = RoundedCornerShape(12.dp))
-                )
+                ) {
+                    BasicTextField(
+                        value = secretQuestionAnswer,
+                        onValueChange = { secretQuestionAnswer = it },
+                        cursorBrush = SolidColor(Orange),
+                        textStyle = TextStyle(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 13.sp, color = Color.Black
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(72.dp)
+                            .background(Color.White, shape = RoundedCornerShape(2.dp))
+                            .padding(16.dp)
+                    )
+                }
             }
         }
-    }
 
-//    Button(
-//        onClick = {},
-//        enabled = isBtnEnabled,
-//        shape = RoundedCornerShape(4.dp),
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = Orange,
-//            contentColor = Color.White
-//        ),
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Text(
-//            text = "Proceed",
-//            fontSize = 18.sp,
-//            color = Color.White,
-//            modifier = Modifier.padding(vertical = 16.dp)
-//        )
-//    }
+        Button(
+            onClick = {},
+            enabled = isBtnEnabled,
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Orange,
+                contentColor = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Proceed",
+                fontSize = 18.sp,
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 9.dp)
+            )
+        }
+    }
 }
 
 @Composable
@@ -211,16 +225,17 @@ fun PinField(heading: String) {
         ) {
             repeat(6) {
                 Card(
-                    shape = RoundedCornerShape(2.dp),
-                    elevation = CardDefaults.elevatedCardElevation(4.dp),
-                    modifier = if (it == noOfDigits - 1) Modifier.weight(1f)
-                    else Modifier
+                    shape = RoundedCornerShape(4.dp),
+                    elevation = CardDefaults.elevatedCardElevation(3.dp),
+                    modifier = Modifier
                         .weight(1f)
-                        .padding(end = 4.dp)
+                        .padding(end = 6.dp)
                 ) {
                     TextField(
-                        value = otpValues[it], onValueChange = { value ->
-                            otpValues[it] = if (value.isNotEmpty()) value.last().toString() else ""
+                        value = otpValues[it],
+                        onValueChange = { value ->
+                            otpValues[it] = if (value.isEmpty()) value else value.first().toString()
+
                             if (value.isNotEmpty()) focusManager.moveFocus(FocusDirection.Right)
                             else focusManager.moveFocus(FocusDirection.Left)
                         },
@@ -263,7 +278,6 @@ fun CustomDropDown(modifier: Modifier = Modifier) {
 
     val dataList = listOf(
         "Mother last name",
-        "Father last name",
         "Pet name",
         "Home town"
     )
@@ -273,7 +287,7 @@ fun CustomDropDown(modifier: Modifier = Modifier) {
         onValueChange = { dropDownText = it },
         modifier = modifier
             .fillMaxWidth()
-            .shadow(2.dp, shape = RoundedCornerShape(4.dp))
+            .shadow(3.dp, shape = RoundedCornerShape(4.dp))
             .onGloballyPositioned { coordinates ->
                 textFieldSize = coordinates.size.toSize()
             }
@@ -284,10 +298,10 @@ fun CustomDropDown(modifier: Modifier = Modifier) {
                 "Select Question",
                 color = Color.Gray,
                 fontWeight = FontWeight.Normal,
-                fontSize = 12.sp,
+                fontSize = 13.sp,
             )
         },
-
+        textStyle = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium, color = Black),
         trailingIcon = {
             Icon(dropDownIcon, "contentDescription",
                 Modifier.clickable { isDropDownExpanded = !isDropDownExpanded })
@@ -321,7 +335,7 @@ fun CustomDropDown(modifier: Modifier = Modifier) {
                     Text(
                         text = it,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 12.sp,
+                        fontSize = 13.sp,
                         modifier = Modifier.background(Color.White)
                     )
                 },

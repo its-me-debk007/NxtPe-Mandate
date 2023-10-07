@@ -1,6 +1,13 @@
 package com.example.nxtpetask.ui.screen
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.telephony.SubscriptionManager
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,9 +40,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.nxtpetask.R
+import com.example.nxtpetask.ui.screen.component.CustomDialog
+import com.example.nxtpetask.ui.screen.component.CustomVerificationDialog
 import com.example.nxtpetask.ui.screen.component.SimListItem
-import kotlinx.coroutines.delay
+import com.example.nxtpetask.util.readSimCardsInfo
 
+@SuppressLint("MissingPermission")
 @Composable
 fun NxtDukaHome(navController: NavController) {
     var simSelected by remember { mutableStateOf(-1) }
@@ -44,8 +54,28 @@ fun NxtDukaHome(navController: NavController) {
     var showConfirmationDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toast.makeText(
+                    context,
+                    "Please grant permission to access SIM Card Info",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@rememberLauncherForActivityResult
+            }
+
+            val subscriptionManager =
+                context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+
+            val subscriptionInfoList = subscriptionManager.activeSubscriptionInfoList
+
+            simList.addAll(readSimCardsInfo(context, subscriptionInfoList))
+        }
+
     LaunchedEffect(Unit) {
-        simList.add(readSimCardInfo(context))
+        permissionLauncher.launch(Manifest.permission.READ_PHONE_STATE)
     }
 
     Column(
@@ -125,9 +155,12 @@ fun NxtDukaHome(navController: NavController) {
                 showVerificationDialog = true
             })
 
-        if (showVerificationDialog) CustomVerificationDialog(navController, onDismissRequest = {
-            showVerificationDialog = false
-        },)
+        if (showVerificationDialog) CustomVerificationDialog(
+            navController,
+            onDismissRequest = {
+                showVerificationDialog = false
+            },
+        )
 
         Text(
             text = "By selecting a SIM I agree to the Terms and Conditions. Regular carrier charges may apply.",

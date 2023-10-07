@@ -36,7 +36,7 @@ import com.example.nxtpetask.ui.theme.InactiveTickGrey
 fun SimListItem(simNo: Int, simName: String, selected: Boolean = false, onSelect: () -> Unit) {
     Card(
         shape = RoundedCornerShape(2.dp),
-        elevation = CardDefaults.elevatedCardElevation(1.dp),
+        elevation = CardDefaults.elevatedCardElevation(3.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
